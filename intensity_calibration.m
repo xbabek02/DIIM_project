@@ -1,0 +1,22 @@
+function [bias, dark, flat] = intensity_calibration(bias_dir, dark_dir, flat_dir)
+    
+    % Load image stacks
+    [bias_imgs, ~] = load_images(bias_dir);
+    [dark_imgs, ~] = load_images(dark_dir);
+    [flat_imgs, ~] = load_images(flat_dir);
+
+    mean_B = mean(bias_imgs, 3);
+    mean_D = mean(dark_imgs - mean_B, 3);
+    % Subtract background + darkframe from every image
+    corrected_F = flat_imgs - mean_B - mean_D;
+    
+    F = sum(corrected_F, 3);
+    
+    F = double(F);
+    F = F ./ max(F(:));
+    norm_F = uint8(F * 255);
+
+    bias = double(mean_B);
+    dark = double(mean_D);
+    flat = double(norm_F);
+end
