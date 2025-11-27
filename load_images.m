@@ -15,7 +15,7 @@ function [imgs, filenames] = load_images(folder)
             imgs = zeros([size(img), length(files)]);
         end
 
-        imgs(:,:,:,i) = img;
+        imgs(:,:,:,i) = im2double(img);
     end
 
     filenames = {files.name};

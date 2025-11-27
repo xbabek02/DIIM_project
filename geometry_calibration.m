@@ -1,6 +1,4 @@
 function [x_sc,y_sc] = geometry_calibration(I)
-    
-    I = uint8(I);
     chess_square_size = 12.5; % mm
 
     [imagePoints, ~] = detectCheckerboardPoints(I);
@@ -32,45 +30,45 @@ function [x_sc,y_sc] = geometry_calibration(I)
         point_D = closest_D(idx,:);
     end
 
-    % --- UNCOMMENT TO PLOT FOR A REPORT
-    % X_bias = norm(point_L - top_right) / 20; % 1/5 of 4 squares as bias
-    % Y_bias = norm(point_D - top_right) / 20;
-    % 
-    % mask = imagePoints(:,1) >= point_L(1) - X_bias & ...   % X constraint
-    %        imagePoints(:,2) >= point_D(2) - Y_bias ;        % Y constraint
-    % 
-    % filteredPoints = imagePoints(mask, :);
-    % figure; imshow(I); hold on;
-    % 
-    % % min x - y
-    % [~, idx] = min(filteredPoints(:,1) - filteredPoints(:,2));
-    % top_left = filteredPoints(idx,:);
-    % 
-    % % max x - y
-    % [~, idx] = max(filteredPoints(:,1) - filteredPoints(:,2));
-    % bottom_right = filteredPoints(idx,:);
-    % 
-    % [~, idx] = min(filteredPoints(:,1) + filteredPoints(:,2));
-    % bottom_left = filteredPoints(idx,:);
-    % 
-    % % Draw the points
-    % plot(bottom_left(1),  bottom_left(2),  'ro', 'MarkerSize', 10, 'LineWidth', 2);
-    % plot(top_left(1),     top_left(2),     'go', 'MarkerSize', 10, 'LineWidth', 2);
-    % plot(bottom_right(1), bottom_right(2), 'bo', 'MarkerSize', 10, 'LineWidth', 2);
-    % plot(top_right(1),    top_right(2),    'mo', 'MarkerSize', 10, 'LineWidth', 2);
-    % 
-    % % Connect the corners (close the polygon)
-    % x = [bottom_left(1),  bottom_right(1), top_right(1), top_left(1), bottom_left(1)];
-    % y = [bottom_left(2),  bottom_right(2), top_right(2), top_left(2), bottom_left(2)];
-    % 
-    % plot(x, y, 'y-', 'LineWidth', 3);
-    % 
-    % hold off;
-    % 
-    % figure;
-    % imshow(I); hold on;
-    % plot(filteredPoints(:,1), filteredPoints(:,2), 'ro');
-    % hold off;
+    %--- UNCOMMENT TO PLOT FOR A REPORT
+    X_bias = norm(point_L - top_right) / 20; % 1/5 of 4 squares as bias
+    Y_bias = norm(point_D - top_right) / 20;
+
+    mask = imagePoints(:,1) >= point_L(1) - X_bias & ...   % X constraint
+           imagePoints(:,2) >= point_D(2) - Y_bias ;        % Y constraint
+
+    filteredPoints = imagePoints(mask, :);
+    figure; imshow(I); hold on;
+
+    % min x - y
+    [~, idx] = min(filteredPoints(:,1) - filteredPoints(:,2));
+    top_left = filteredPoints(idx,:);
+
+    % max x - y
+    [~, idx] = max(filteredPoints(:,1) - filteredPoints(:,2));
+    bottom_right = filteredPoints(idx,:);
+
+    [~, idx] = min(filteredPoints(:,1) + filteredPoints(:,2));
+    bottom_left = filteredPoints(idx,:);
+
+    % Draw the points
+    plot(bottom_left(1),  bottom_left(2),  'ro', 'MarkerSize', 10, 'LineWidth', 2);
+    plot(top_left(1),     top_left(2),     'go', 'MarkerSize', 10, 'LineWidth', 2);
+    plot(bottom_right(1), bottom_right(2), 'bo', 'MarkerSize', 10, 'LineWidth', 2);
+    plot(top_right(1),    top_right(2),    'mo', 'MarkerSize', 10, 'LineWidth', 2);
+
+    % Connect the corners (close the polygon)
+    x = [bottom_left(1),  bottom_right(1), top_right(1), top_left(1), bottom_left(1)];
+    y = [bottom_left(2),  bottom_right(2), top_right(2), top_left(2), bottom_left(2)];
+
+    plot(x, y, 'y-', 'LineWidth', 3);
+
+    hold off;
+
+    figure;
+    imshow(I); hold on;
+    plot(filteredPoints(:,1), filteredPoints(:,2), 'ro');
+    hold off;
     
     X_tilesx4 = norm(point_L - top_right); %4x12.5mm
     Y_tilesx4 = norm(point_D - top_right);
