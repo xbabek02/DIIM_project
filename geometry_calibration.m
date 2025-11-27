@@ -6,7 +6,7 @@ function [x_sc,y_sc] = geometry_calibration(I)
     [~, idx] = max(imagePoints(:,1) + imagePoints(:,2));
     top_right = imagePoints(idx,:);
 
-    %we will be iteratively finding 4 closest points in the same axis 
+    % we will be iteratively finding 4 closest points in the same axis 
     n_points = 4;
 
     point_L = top_right;

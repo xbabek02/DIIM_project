@@ -8,18 +8,22 @@ function [bias, dark, flat] = intensity_calibration(bias_dir, dark_dir, flat_dir
     bias_imgs = double(bias_imgs);
     dark_imgs = double(dark_imgs);
     flat_imgs = double(flat_imgs);
-    
+
     % ----- MASTER BIAS -----
     bias = mean(bias_imgs, 4);
 
     % ----- MASTER DARK -----
     dark = mean(dark_imgs - bias, 4);
-    
+
     % ----- MASTER FLAT -----
-    flat = mean(flat_imgs, 4);
+    % remove bias + dark from flats
+    flat_raw = mean(flat_imgs, 4);
+
+    % normalize flat
+    flat = flat_raw ./ mean(flat_raw(:));
+    %flat = flat_raw ./ max(flat_raw(:));
+    %flat = flat_raw;
 end
-
-
 
 % function [bias, dark, flat] = intensity_calibration(bias_dir, dark_dir, flat_dir)
 % 
