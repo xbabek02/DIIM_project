@@ -1,5 +1,4 @@
 function [bias, dark, flat] = intensity_calibration(bias_dir, dark_dir, flat_dir)
-
     % Load image stacks
     [bias_imgs, ~] = load_images(bias_dir);
     [dark_imgs, ~] = load_images(dark_dir);
@@ -19,12 +18,6 @@ function [bias, dark, flat] = intensity_calibration(bias_dir, dark_dir, flat_dir
     % ----- MASTER FLAT -----
     flat = mean(flat_imgs, 4);
 end
-
-
-
-
-
-
 
 
 
