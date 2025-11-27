@@ -1,5 +1,3 @@
-clc; clear; close all;
-
 bias_dir = 'Images/Bias';
 dark_dir = 'Images/Dark';
 flat_dir = 'Images/Flat';

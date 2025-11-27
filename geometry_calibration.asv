@@ -72,9 +72,8 @@ function [x_sc,y_sc] = geometry_calibration(I)
     % plot(filteredPoints(:,1), filteredPoints(:,2), 'ro');
     % hold off;
     
-    X_tilesx4 = norm(point_L - top_right); %4x12.5mm
-    Y_tilesx4 = norm(point_D - top_right);
     
-    x_sc = X_tilesx4 / (chess_square_size*4);
-    y_sc = Y_tilesx4 / (chess_square_size*4);
+
+    x_sc = 1;
+    y_sc = 1;
 end

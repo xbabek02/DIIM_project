@@ -15,7 +15,7 @@ function [imgs, filenames] = load_images(folder)
             imgs = zeros([size(img), length(files)]);
         end
 
-        imgs(:,:,:,i) = img;   % Note the extra ':' for RGB channel
+        imgs(:,:,:,i) = img;
     end
 
     filenames = {files.name};
