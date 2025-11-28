@@ -11,6 +11,9 @@ gt_T = readtable('gt.csv');
 
 numImgs = numel(filenames);
 
+all_gt   = [];
+all_pred = [];
+
 for k = 1:numImgs
     thisFile = filenames{k};
     idx = strcmp(gt_T.file, thisFile);
@@ -29,4 +32,41 @@ for k = 1:numImgs
     fprintf('Image: %s\n', thisFile);
     fprintf('GT:   %s\n', mat2str(gt));
     fprintf('Pred: %s\n\n', mat2str(pred));
+
+    all_gt   = [all_gt; gt];
+    all_pred = [all_pred; pred];
+    
 end
+
+correct = all_gt == all_pred;
+per_coin_accuracy = 100 * mean(correct, 1);
+disp('Accuracy per coin type (%):');
+disp(per_coin_accuracy);
+
+overall_accuracy = 100 * mean(all(correct, 2));
+fprintf('Overall exact-match accuracy: %.2f%%\n\n', overall_accuracy);
+
+mae = mean(abs(all_gt - all_pred), 1);
+disp('Mean absolute error per coin type:');
+disp(mae);
+
+percentage_error = 100 * mean( abs(all_gt - all_pred) ./ ((abs(all_gt) + abs(all_pred)) / 2), 1 );
+disp('Percentage error per coin type (%):');
+disp(percentage_error);
+
+percentage_accuracy = 100 - percentage_error;
+disp('Percentage accuracy per coin type (%):');
+disp(percentage_accuracy);
+
+gt_total   = sum(all_gt,   2);   
+pred_total = sum(all_pred, 2); 
+
+total_exact_accuracy = 100 * mean(gt_total == pred_total);
+fprintf('Total coin exact-match accuracy: %.2f%%\n', total_exact_accuracy);
+
+total_mae = mean(abs(gt_total - pred_total));
+fprintf('Total coin MAE: %.2f coins\n', total_mae);
+
+percentage_error_total = 100 * mean(abs(gt_total - pred_total) ./ max(gt_total, 1));
+percentage_accuracy_total = 100 - percentage_error_total;
+fprintf('Total coin percentage accuracy: %.2f%%\n', percentage_accuracy_total);
