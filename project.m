@@ -50,14 +50,6 @@ mae = mean(abs(all_gt - all_pred), 1);
 disp('Mean absolute error per coin type:');
 disp(mae);
 
-percentage_error = 100 * mean( abs(all_gt - all_pred) ./ ((abs(all_gt) + abs(all_pred)) / 2), 1 );
-disp('Percentage error per coin type (%):');
-disp(percentage_error);
-
-percentage_accuracy = 100 - percentage_error;
-disp('Percentage accuracy per coin type (%):');
-disp(percentage_accuracy);
-
 gt_total   = sum(all_gt,   2);   
 pred_total = sum(all_pred, 2); 
 
