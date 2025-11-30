@@ -19,10 +19,10 @@ function [e2, e1, c50, c20, c10, c5] = estim_coins(measurement, bias, dark, flat
     corrected_norm = corrected .* scale;
     
     % DEMO/DEBUG PICTURES
-    figure;
-    imshow(flat);
-    figure;
-    imshow(corrected_norm);
+    % figure;
+    % imshow(flat);
+    % figure;
+    % imshow(corrected_norm);
 
     e2_d = 25.75; %mm -> max
     e1_d = 23.25;
@@ -42,24 +42,28 @@ function [e2, e1, c50, c20, c10, c5] = estim_coins(measurement, bias, dark, flat
     
     mask = extract_coins(flat, corrected_norm);
     % Measure coins
-    [centers, diameters] = find_circles(mask);  %,c10_p-100, e2_p+100);
-    
+    mask_separated = separate_coins_watershed(mask);
+    [centers, diameters] = find_circles(mask_separated, c10_p-50, e2_p+50);
+
     if isempty(centers)
         fprintf("No coins found");
     end
 
-    figure;
-    imshow(measurement);
-    hold on;
-
     radii = diameters /2;
     
-    % Draw each circle
-    viscircles(centers, radii, 'Color', 'r', 'LineWidth', 1.5);
+
+    % % DEBUG FOR REPORT
+    % figure;
+    % imshow(mask_separated);
+    % figure;
+    % imshow(measurement);
+    % hold on;
+    % 
+    % % Draw each circle
+    % viscircles(centers, radii, 'Color', 'r', 'LineWidth', 1.5);
+    % 
+    % hold off;
     
-    hold off;
-    
-    % output placeholders
     coinNames = {'e2','e1','c50','c20','c10','c5'};
     coinDiameters = [e2_p, e1_p, c50_p, c20_p, c10_p, c5_p];
     
@@ -77,7 +81,6 @@ function [e2, e1, c50, c20, c10, c5] = estim_coins(measurement, bias, dark, flat
         counts(idx) = counts(idx) + 1;
     end
     
-    % Export counts
     e2  = counts(1);
     e1  = counts(2);
     c50 = counts(3);
@@ -85,36 +88,3 @@ function [e2, e1, c50, c20, c10, c5] = estim_coins(measurement, bias, dark, flat
     c10 = counts(5);
     c5  = counts(6);
 end
-
-% function [e2, e1, c50, c20, c10, c5] = estim_coins(measurement, bias, dark, flat)
-% 
-%     %[x_sc,y_sc] = geometry_calibration(measurement);
-% 
-%     % Compute absolute difference
-%     % ------ LIGHTING NORMALIZATION ------
-%     % Compute global brightness ratio
-%     scale = mean(flat(:)) / mean(measurement(:));
-% 
-%     % Apply scale factor
-%     M_adj = measurement * scale;
-% 
-%     % Now subtract normalized images
-%     diffImg = abs(M_adj - flat);
-% 
-%     % Convert to grayscale difference
-%     diffGray = rgb2gray(diffImg);
-% 
-%     % Threshold
-%     bw = imbinarize(diffGray, 'adaptive');
-% 
-%     % Morphology
-%     bw = bwareaopen(bw, 50);
-%     bw = imclose(bw, strel('disk', 5));
-% 
-%     figure;
-%     imshow(bw);
-%     title('Detected Coins');
-% 
-%     % outputs
-%     e2 = 0; e1 = 0; c50 = 0; c20 = 0; c10 = 0; c5 = 0;
-% end

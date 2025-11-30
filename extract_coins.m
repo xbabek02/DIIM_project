@@ -30,8 +30,8 @@ function bwCoins = extract_coins(bg, img)
     bwCoins = imopen(bwCoins, strel('disk', 3));
     bwCoins = imclose(bwCoins, strel('disk', 3));
 
-    % Show result
-    figure;
-    imshow(bwCoins);
-    title("Detected Coins");
+    % % DEBUG - Show result
+    % figure;
+    % imshow(bwCoins);
+    % title("Detected Coins");
 end

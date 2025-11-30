@@ -1,19 +1,25 @@
-function [centers, diameters] = find_circles(bwMask)
-    % Ensure logical mask
+function [centers, diameters] = find_circles(bwMask, minDiam, maxDiam)
+    % Ensure logical input
     bwMask = logical(bwMask);
 
-    % Get connected components (each coin = one blob)
-    stats = regionprops(bwMask, 'Centroid', 'Area', 'EquivDiameter');
+    % Connected components
+    stats = regionprops(bwMask, 'Centroid', 'EquivDiameter');
 
-    % Preallocate
+    % Extract all diameters
+    allDiam = [stats.EquivDiameter]';
+
+    % Filter by diameter limits
+    validIdx = allDiam >= minDiam & allDiam <= maxDiam;
+
+    % Keep only valid stats
+    stats = stats(validIdx);
+    diameters = allDiam(validIdx);
+
+    % Extract centers
     numCoins = numel(stats);
     centers = zeros(numCoins, 2);
-    radii   = zeros(numCoins, 1);
 
-    % Extract center and radius
     for i = 1:numCoins
         centers(i, :) = stats(i).Centroid;
-        radii(i) = stats(i).EquivDiameter / 2;
     end
-    diameters = radii * 2;
 end
