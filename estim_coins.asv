@@ -1,28 +1,24 @@
 function [e2, e1, c50, c20, c10, c5] = estim_coins(measurement, bias, dark, flat)
     [x_sc,y_sc] = geometry_calibration(measurement);
     
+    pad = 50;
+sz = 200;
+
+r1 = pad + 1; r2 = pad + sz;
+c1 = pad + 1; c2 = pad + sz;
+
+bg_meas = corrected(r1:r2, c1:c2, :);
+bg_flat = flat_corr(r1:r2, c1:c2, :);
+
+
+
     corrected = measurement - bias - dark;
-
-    pad = 80;
-    sz = 200;
-    
-    r1 = pad + 1; r2 = pad + sz;
-    c1 = pad + 1; c2 = pad + sz;
-    
-    bg_meas = corrected(r1:r2, c1:c2, :);
-    bg_flat = flat(r1:r2, c1:c2, :);
-
-    avg_meas = mean(bg_meas, [1 2]);
-    avg_flat = mean(bg_flat, [1 2]);
-
-    scale = avg_flat ./ avg_meas;
-    corrected_norm = corrected .* scale;
     
     % DEMO/DEBUG PICTURES
-    figure;
-    imshow(flat);
-    figure;
-    imshow(corrected_norm);
+    % figure;
+    % imshow(flat);
+    % figure;
+    % imshow(corrected);
 
     e2_d = 25.75; %mm -> max
     e1_d = 23.25;
@@ -40,7 +36,7 @@ function [e2, e1, c50, c20, c10, c5] = estim_coins(measurement, bias, dark, flat
     c10_p = c10_d * sc;
     c5_p = c5_d * sc;
     
-    mask = extract_coins(flat, corrected_norm);
+    mask = extract_coins(flat, corrected);
     % Measure coins
     [centers, diameters] = find_circles(mask);  %,c10_p-100, e2_p+100);
     

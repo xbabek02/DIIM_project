@@ -17,12 +17,10 @@ function [bias, dark, flat] = intensity_calibration(bias_dir, dark_dir, flat_dir
 
     % ----- MASTER FLAT -----
     % remove bias + dark from flats
-    flat_raw = mean(flat_imgs, 4);
+    flat = mean(flat_imgs - dark - bias, 4);
 
     % normalize flat
-    flat = flat_raw ./ mean(flat_raw(:));
-    %flat = flat_raw ./ max(flat_raw(:));
-    %flat = flat_raw;
+    %flat = flat_raw ./ mean(flat_raw(:));
 end
 
 % function [bias, dark, flat] = intensity_calibration(bias_dir, dark_dir, flat_dir)

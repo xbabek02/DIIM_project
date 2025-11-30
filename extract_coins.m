@@ -17,7 +17,7 @@ function bwCoins = extract_coins(bg, img)
     diffGray = max(diffImg, [], 3);
 
     % Threshold
-    bwCoins = diffGray > 0.65;
+    bwCoins = diffGray > 0.15;
 
     % Morphological cleaning
     bwCoins = imclose(bwCoins, strel('disk', 5));   % close gaps
