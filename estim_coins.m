@@ -1,4 +1,40 @@
 function [e2, e1, c50, c20, c10, c5] = estim_coins(measurement, bias, dark, flat)
+%ESTIM_COINS Estimate the number of Euro coins and cents in an image.
+%
+%   [E2, E1, C50, C20, C10, C5] = ESTIM_COINS(MEASUREMENT, BIAS, DARK, FLAT)
+%   detects and classifies Euro coins in the input MEASUREMENT image.
+%
+%   INPUTS:
+%       MEASUREMENT - The raw camera image containing coins.
+%       BIAS        - Bias frame used for sensor correction.
+%       DARK        - Dark frame used for sensor correction.
+%       FLAT        - Flat-field image used for illumination correction.
+%
+%   The function performs the following steps:
+%       1. Geometry calibration to convert mm to pixel scale.
+%       2. Bias/dark subtraction
+%       3. Background-based normalization of intensity.
+%       4. Coin segmentation using extract_coins().
+%       5. Coin separation using watershed.
+%       6. Circle detection (find_circles) to estimate diameters.
+%       7. Classification of each circle into known coin types:
+%           - €2, €1, 50c, 20c, 10c, 5c
+%
+%   OUTPUTS:
+%       E2   - Number of €2 coins detected.
+%       E1   - Number of €1 coins detected.
+%       C50  - Number of 50 cent coins detected.
+%       C20  - Number of 20 cent coins detected.
+%       C10  - Number of 10 cent coins detected.
+%       C5   - Number of 5 cent coins detected.
+%
+%   EXAMPLE:
+%       [e2,e1,c50,c20,c10,c5] = estim_coins(meas, bias, dark, flat);
+%
+%   NOTE: function was tested only using the master frames that were
+%       computed in the project.m file. See also project.m and
+%       intensity_calibration.m to understand the implementation.
+%
     [x_sc,y_sc] = geometry_calibration(measurement);
     
     corrected = measurement - bias - dark;

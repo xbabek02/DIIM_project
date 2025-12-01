@@ -55,9 +55,6 @@ disp(mae);
 gt_total   = sum(all_gt,   2);   
 pred_total = sum(all_pred, 2); 
 
-total_exact_accuracy = 100 * mean(gt_total == pred_total);
-fprintf('Total coin exact-match accuracy: %.2f%%\n', total_exact_accuracy);
-
 total_mae = mean(abs(gt_total - pred_total));
 fprintf('Total coin MAE: %.2f coins\n', total_mae);
 
