@@ -5,11 +5,6 @@ function bwCoins = extract_coins(bg, img)
     % imshow(img);
     % figure;
     % imshow(bg);
-    % 
-    % img = imadjust(img, stretchlim(img, 0.02), []);   % increase contrast
-    % figure;
-    % imshow(img);
-
     % Compute absolute per-pixel difference
     diffImg = abs(img - bg);
 

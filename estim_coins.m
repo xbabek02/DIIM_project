@@ -55,14 +55,14 @@ function [e2, e1, c50, c20, c10, c5] = estim_coins(measurement, bias, dark, flat
     % % DEBUG FOR REPORT
     % figure;
     % imshow(mask_separated);
-    % figure;
-    % imshow(measurement);
-    % hold on;
-    % 
-    % % Draw each circle
-    % viscircles(centers, radii, 'Color', 'r', 'LineWidth', 1.5);
-    % 
-    % hold off;
+    figure;
+    imshow(measurement);
+    hold on;
+
+    % Draw each circle
+    viscircles(centers, radii, 'Color', 'r', 'LineWidth', 1.5);
+
+    hold off;
     
     coinNames = {'e2','e1','c50','c20','c10','c5'};
     coinDiameters = [e2_p, e1_p, c50_p, c20_p, c10_p, c5_p];

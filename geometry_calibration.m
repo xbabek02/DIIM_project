@@ -69,7 +69,7 @@ function [x_sc,y_sc] = geometry_calibration(I)
     % imshow(I); hold on;
     % plot(filteredPoints(:,1), filteredPoints(:,2), 'ro');
     % hold off;
-    
+    % 
     X_tilesx4 = norm(point_L - top_right); %4x12.5mm
     Y_tilesx4 = norm(point_D - top_right);
     

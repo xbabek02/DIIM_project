@@ -1,3 +1,5 @@
+warning('off', 'vision:calibrate:boardShouldBeAsymmetric');
+
 bias_dir = 'Images/Bias';
 dark_dir = 'Images/Dark';
 flat_dir = 'Images/Flat';
